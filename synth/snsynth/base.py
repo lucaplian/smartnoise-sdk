@@ -223,10 +223,11 @@ class Synthesizer(SDGYMBaseSynthesizer):
             synth_module, synth_class = synth_class.rsplit('.', 1)
             synth_module = __import__(synth_module, fromlist=[synth_class])
             synth_class = getattr(synth_module, synth_class)
-            if (epochs is None and batch_size is None) or (epochs==None and batch_size==None):
-                return synth_class(epsilon=epsilon, disabled_dp=disabled_dp,*args, **kwargs)
+            #if (epochs is None and batch_size is None) or (epochs==None and batch_size==None):
+                
+            return synth_class(epsilon=epsilon, disabled_dp=disabled_dp,*args, **kwargs)
 
-            return synth_class(epsilon=epsilon, epochs=epochs, batch_size= batch_size, disabled_dp=disabled_dp,*args, **kwargs)
+            #return synth_class(epsilon=epsilon, epochs=epochs, batch_size= batch_size, disabled_dp=disabled_dp,*args, **kwargs)
         else:
             raise ValueError('Synthesizer must be a string or a class')
 

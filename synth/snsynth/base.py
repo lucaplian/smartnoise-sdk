@@ -182,7 +182,7 @@ class Synthesizer(SDGYMBaseSynthesizer):
 
     # factory method
     @classmethod
-    def create(cls, synth=None, epsilon=None, *args, **kwargs):
+    def create(cls, synth=None, epsilon=None, epochs=300, batch_size=500, disabled_dp= False, *args, **kwargs):
         """
         Create a differentially private synthesizer.
 
@@ -223,7 +223,7 @@ class Synthesizer(SDGYMBaseSynthesizer):
             synth_module, synth_class = synth_class.rsplit('.', 1)
             synth_module = __import__(synth_module, fromlist=[synth_class])
             synth_class = getattr(synth_module, synth_class)
-            return synth_class(epsilon=epsilon, *args, **kwargs)
+            return synth_class(epsilon=epsilon, epochs=epochs, batch_size= batch_size, disabled_dp=disabled_dp,*args, **kwargs)
         else:
             raise ValueError('Synthesizer must be a string or a class')
 

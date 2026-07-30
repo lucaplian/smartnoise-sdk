@@ -286,7 +286,6 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
             alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
             noise_multiplier=self.sigma,
             max_grad_norm=self.max_per_sample_grad_norm,
-            clip_per_layer=True,
         )
 
         if not self.disabled_dp:

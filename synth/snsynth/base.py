@@ -225,7 +225,7 @@ class Synthesizer(SDGYMBaseSynthesizer):
             synth_class = getattr(synth_module, synth_class)
             #if (epochs is None and batch_size is None) or (epochs==None and batch_size==None):
                 
-            return synth_class(epsilon=epsilon, disabled_dp=disabled_dp,*args, **kwargs)
+            return synth_class(epsilon=epsilon, *args, **kwargs)
 
             #return synth_class(epsilon=epsilon, epochs=epochs, batch_size= batch_size, disabled_dp=disabled_dp,*args, **kwargs)
         else:

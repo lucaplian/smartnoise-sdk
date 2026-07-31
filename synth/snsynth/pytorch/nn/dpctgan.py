@@ -148,8 +148,8 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
     def __init__(
         self,
         embedding_dim=128,
-        generator_dim=(128, 128),
-        discriminator_dim=(128, 128),
+        generator_dim=(64, 64),
+        discriminator_dim=(64, 64),
         generator_lr=2e-4,
         generator_decay=1e-6,
         discriminator_lr=2e-4,

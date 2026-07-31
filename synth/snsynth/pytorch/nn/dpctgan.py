@@ -304,13 +304,14 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
 
         steps_per_epoch = max(len(train_data) // self._batch_size, 1)
         for i in range(self._epochs):
+            for p in discriminator.parameters():
+                if hasattr(p, "grad_sample"):
+                    del p.grad_sample
             if not self.disabled_dp:
                 # if self.loss == 'cross_entropy':
                 #    autograd_grad_sample.clear_backprops(discriminator)
                 # else:
-                for p in discriminator.parameters():
-                    if hasattr(p, "grad_sample"):
-                        del p.grad_sample
+                
 
                 if self.delta is None:
                     self.delta = 1 / (

@@ -471,7 +471,8 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
                     % (i + 1, loss_g.detach().cpu(), loss_d.detach().cpu()),
                     flush=True,
                 )
-                print("epsilon is {e}, alpha is {a}".format(e=epsilon, a=best_alpha))
+                if not self.disabled_dp:
+                    print("epsilon is {e}, alpha is {a}".format(e=epsilon, a=best_alpha))
 
         return self.loss_d_list, self.loss_g_list, self.epsilon_list, self.alpha_list
 

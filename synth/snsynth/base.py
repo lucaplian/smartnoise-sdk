@@ -140,6 +140,8 @@ synth_map = {
     },
 }
 
+neural_networks_list_with_epochs = ['dpgan', 'patectgan', 'dpctgan']
+neural_networks_list_with_dp_dezactivated = ['dpctgan']
 class Synthesizer(SDGYMBaseSynthesizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -182,7 +184,7 @@ class Synthesizer(SDGYMBaseSynthesizer):
 
     # factory method
     @classmethod
-    def create(cls, synth=None, epsilon=None, epochs=300, batch_size=500, disabled_dp= False, *args, **kwargs):
+    def create(cls, synth=None, epsilon=None, epochs=300, batch_size=500, disabled_dp=False, *args, **kwargs):
         """
         Create a differentially private synthesizer.
 
@@ -202,6 +204,7 @@ class Synthesizer(SDGYMBaseSynthesizer):
         :type kwargs: dict, optional
 
         """
+        
         if isinstance(epsilon, int):
             epsilon = float(epsilon)
         if synth is None or (isinstance(synth, type) and issubclass(synth, Synthesizer)):
@@ -217,17 +220,19 @@ class Synthesizer(SDGYMBaseSynthesizer):
                 synth = matching_keys[0]
         if isinstance(synth, str):
             synth = synth.lower()
+            
             if synth not in synth_map:
                 raise ValueError('Synthesizer {} not found'.format(synth))
             synth_class = synth_map[synth]['class']
             synth_module, synth_class = synth_class.rsplit('.', 1)
             synth_module = __import__(synth_module, fromlist=[synth_class])
             synth_class = getattr(synth_module, synth_class)
-            #if (epochs is None and batch_size is None) or (epochs==None and batch_size==None):
-                
-            return synth_class(epsilon=epsilon, *args, **kwargs)
+            if synth in neural_networks_list_with_dp_dezactivated:
+                return synth_class(epsilon=epsilon, epochs=epochs, batch_size=batch_size, disabled_dp=disabled_dp, *args, **kwargs)
+            elif synth in neural_networks_list_with_epochs:
+                return synth_class(epsilon=epsilon, epochs=epochs, batch_size=batch_size, *args, **kwargs)
 
-            #return synth_class(epsilon=epsilon, epochs=epochs, batch_size= batch_size, disabled_dp=disabled_dp,*args, **kwargs)
+            return synth_class(epsilon=epsilon, *args, **kwargs)
         else:
             raise ValueError('Synthesizer must be a string or a class')
 

@@ -17,6 +17,7 @@ class SDGYMBaseSynthesizer:
         preprocessor_eps=0.0,
         nullable=False
         ):
+        print("it reaches SDGYMBaseSynthesizer")
         """
         Fit the synthesizer model on the data.
 

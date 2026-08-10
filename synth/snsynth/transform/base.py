@@ -66,6 +66,7 @@ class ColumnTransformer:
 
         Calling this method repeatedly should perform a fresh fit each time using the new data.  
         """
+        print("it reaches ColumnTransformer")
         self._clear_fit()
         if idx is None:
             for val in data:

@@ -63,6 +63,7 @@ class TableTransformer:
         :param data: a table represented as a list of tuples, a numpy.ndarray, or a pandas DataFrame
         :param epsilon: the privacy budget to spend fitting the data
         """
+        print("it goes to TableTransformer")
         if self.transformers == []:
             self._fit_finish()
         if epsilon is not None and epsilon > 0.0:

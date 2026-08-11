@@ -37,12 +37,15 @@ class ChainTransformer(CachingColumnTransformer):
                 if transformer.needs_epsilon:
                     transformer.allocate_privacy_budget(epsilon / n_with_epsilon, odometer)
     def _fit_finish(self):
+        print("class chaintransformer def _fit_finish")
+
         vals = self._fit_vals
         for transformer in self.transformers:
             vals = transformer.fit_transform(vals)
         self._fit_vals = []
         self.output_width = self.transformers[-1].output_width
     def _clear_fit(self):
+        print("ChainTransformer _clear_fit()")
         for transformer in self.transformers:
             transformer._clear_fit()
         if self.fit_complete:

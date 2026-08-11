@@ -481,6 +481,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
         """
         TODO: Add condition_column support from CTGAN
         """
+        print("self._generator=", self._generator)
         self._generator.eval()
 
         # output_info = self._transformer.output_info
@@ -500,19 +501,27 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
                 c1 = torch.from_numpy(c1).to(self._device)
                 fakez = torch.cat([fakez, c1], dim=1)
 
+            print("self._generator=", self._generator, "fakez=", fakez)
             fake = self._generator(fakez)
+            print("fake=", fake)
             fakeact = self._apply_activate(fake)
+            print("fakeact=", fakeact)
             data.append(fakeact.detach().cpu().numpy())
+            print("fakeact dettached=", fakeact.detach().cpu().numpy())
 
+        print("data1=", data)
         data = np.concatenate(data, axis=0)
+        print("data2=", data)
         data = data[:n]
+        print("data3=", data)
 
         return self._transformer.inverse_transform(data)
 
     def fit(self, data, *ignore, transformer=None, categorical_columns=[], ordinal_columns=[], continuous_columns=[], preprocessor_eps=0.0, nullable=False):
         print("self=", self)
-        
+
         self.train(data, transformer=transformer, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, preprocessor_eps=preprocessor_eps, nullable=nullable)
 
     def sample(self, n_samples):
+        
         return self.generate(n_samples)

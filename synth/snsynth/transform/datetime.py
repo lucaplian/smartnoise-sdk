@@ -33,8 +33,10 @@ class DateTimeTransformer(ColumnTransformer):
     def cardinality(self):
         return [None]
     def _fit(self, val, idx=None):
+        print("datetimetransformer def _fit")
         pass
     def _clear_fit(self):
+        print("datetimetransformer def _clear_fit")
         # this transform doesn't need fit
         self._fit_complete = True
         self.output_width = 1

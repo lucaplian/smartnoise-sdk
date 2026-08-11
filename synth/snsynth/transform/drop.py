@@ -19,9 +19,11 @@ class DropTransformer(ColumnTransformer):
         return [None]
 
     def _fit(self, _):
+        print("droptransformer def _fit")
         pass
 
     def _clear_fit(self):
+        print("droptransformer def _clear_fit")
         self._fit_complete = True
         self.output_width = 0
 

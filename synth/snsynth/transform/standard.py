@@ -45,6 +45,7 @@ class StandardScaler(CachingColumnTransformer):
         self.epsilon = epsilon
         self.odometer = odometer
     def _fit_finish(self):
+        print("standardscaler def _fit_finish")
         if self.scaler is None:
             if self.epsilon is None or self.epsilon == 0.0:
                 raise ValueError("StandardScaler requires epsilon to estimate mean and variance.")
@@ -95,6 +96,7 @@ class StandardScaler(CachingColumnTransformer):
         else:
             self.output_width = 1
     def _clear_fit(self):
+        print("standardscaler def _clear_fit")
         self._reset_fit()
         self.fit_lower = None
         self.fit_upper = None

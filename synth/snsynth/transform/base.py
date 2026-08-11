@@ -126,10 +126,13 @@ class ColumnTransformer:
         else:
             return [self._inverse_transform(row[idx]) for row in data]
     def _fit(self, val):
+        print("columntransformer2 def _fit")
+
         """Must be implemented by subclasses to fit a single value.
         """
         raise NotImplementedError
     def _fit_finish(self):
+        print("columntransformer def _fit_finish")
         """Should be implemented by subclasses if there is
         any work that needs to be done to finish the fit process."""
         self._fit_complete = True
@@ -157,6 +160,8 @@ class CachingColumnTransformer(ColumnTransformer):
         super().__init__()
         self._fit_vals = []
     def _fit(self, val):
+        print("CachingColumnTransformer def _fit")
+
         """Caches each fit value to be processed by _fit_finish.
         If this method is overridden, it should call super()._fit(val)"""
         self._fit_vals.append(val)

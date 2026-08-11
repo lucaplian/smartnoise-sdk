@@ -88,9 +88,11 @@ class AnonymizationTransformer(ColumnTransformer):
         return [None]
 
     def _fit(self, _):
+        print("annon def _fit")
         pass
 
     def _clear_fit(self):
+        print("annon def _clear_fit")
         self._fit_complete = True
         self.output_width = 1 if self.fake_inbound else 0
 

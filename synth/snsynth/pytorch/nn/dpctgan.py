@@ -301,7 +301,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
         assert self._batch_size % 2 == 0
         mean = torch.zeros(self._batch_size, self._embedding_dim, device=self._device)
         std = mean + 1
-
+        print("begins epochs here")
         steps_per_epoch = max(len(train_data) // self._batch_size, 1)
         for i in range(self._epochs):
             for p in discriminator.parameters():

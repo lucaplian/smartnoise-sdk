@@ -157,6 +157,7 @@ class Synthesizer(SDGYMBaseSynthesizer):
         return list(synth_map.keys())
     def _get_train_data(self, data, *ignore, style, transformer, categorical_columns, ordinal_columns, continuous_columns, nullable, preprocessor_eps):
         if transformer is None or isinstance(transformer, dict):
+            print("before TableTransformer.create")
             self._transformer = TableTransformer.create(data, style=style,
                 categorical_columns=categorical_columns,
                 continuous_columns=continuous_columns,

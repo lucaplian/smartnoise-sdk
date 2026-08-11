@@ -148,7 +148,7 @@ class TableTransformer:
         print("self._inverse_transform=", self._inverse_transform)
         if self.transformers == []:
             return data
-        transformed = [self._inverse_transform(row, i) for row in enumerate(data)]
+        transformed = [self._inverse_transform(row, i) for i, row in enumerate(data)]
         print("self._columns=", self._columns)
         print("self._dtype=", self._dtype)
         if self._columns is not None:

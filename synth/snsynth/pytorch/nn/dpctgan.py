@@ -514,7 +514,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
         print("data2=", data)
         data = data[:n]
         print("data3=", data)
-
+	print("self._transformer.inverse_transform(data)=",self._transformer.inverse_transform(data))
         return self._transformer.inverse_transform(data)
 
     def fit(self, data, *ignore, transformer=None, categorical_columns=[], ordinal_columns=[], continuous_columns=[], preprocessor_eps=0.0, nullable=False):

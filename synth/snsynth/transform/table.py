@@ -178,8 +178,7 @@ class TableTransformer:
                 v = row.pop(0)
             else:
                 v = tuple([row.pop(0) for _ in range(t.output_width)])
-            if j % 10 == 0 and (i-5)%10==0:
-                print("t=", t)
+            
             out_row.append(t._inverse_transform(v))
         return tuple(out_row)
 

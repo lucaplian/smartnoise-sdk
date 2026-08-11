@@ -219,7 +219,7 @@ class TypeMap:
                     coltypes[i] = 'categorical'
                 else:
                     raise ValueError(f"Cannot infer a column type for column {i}")
-        
+        print("before result")
         result = {
             'columns': colnames,
             'categorical_columns': [colnames[i] for i, v in enumerate(coltypes) if v == 'categorical'],

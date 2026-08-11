@@ -255,10 +255,13 @@ class TableTransformer:
         all_specified = list(categorical_columns) + list(ordinal_columns) + list(continuous_columns)
         all_numeric = all([isinstance(c, int) for c in all_specified])
         if isinstance(data, pd.DataFrame):
+            print("cls.from_pandas=", cls.from_pandas(data, style=style, nullable=nullable, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints))
             return cls.from_pandas(data, style=style, nullable=nullable, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints)
         elif isinstance(data, np.ndarray):
+            print("cls.from_numpy=", cls.from_numpy(data, style=style, nullable=nullable, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints))
             return cls.from_numpy(data, style=style, nullable=nullable, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints)
         elif isinstance(data, list):
+            print("cls.from_list=", cls.from_list(data, style=style, nullable=nullable, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints))
             return cls.from_list(data, style=style, nullable=nullable, header=(not all_numeric), categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints)
         else:
             raise ValueError(f"Unknown data type: {type(data)}")

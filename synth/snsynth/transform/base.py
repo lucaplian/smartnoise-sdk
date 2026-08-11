@@ -160,7 +160,6 @@ class CachingColumnTransformer(ColumnTransformer):
         super().__init__()
         self._fit_vals = []
     def _fit(self, val):
-        print("CachingColumnTransformer def _fit")
 
         """Caches each fit value to be processed by _fit_finish.
         If this method is overridden, it should call super()._fit(val)"""

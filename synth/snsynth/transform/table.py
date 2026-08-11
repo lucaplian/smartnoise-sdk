@@ -82,7 +82,6 @@ class TableTransformer:
         if self.output_width == 0:
             warnings.warn("No columns were selected for output.  This may be because all columns were anonymized.")
     def _fit(self, row):
-        print("tabletransformer def _fit")
         for v, t in zip(row, self.transformers):
             t._fit(v)
     def _fit_finish(self):

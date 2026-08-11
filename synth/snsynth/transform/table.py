@@ -246,6 +246,7 @@ class TableTransformer:
             excluded_columns = set(constraints.keys())
 
         if len(continuous_columns) + len(ordinal_columns) + len(categorical_columns) == 0:
+            print("before inferred")
             inferred = TypeMap.infer_column_types(data, excluded_columns=excluded_columns)
             print("inferred=", inferred)
             categorical_columns = inferred['categorical_columns']

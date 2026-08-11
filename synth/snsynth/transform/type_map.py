@@ -168,7 +168,7 @@ class TypeMap:
             n_cached += 1
             if n_cached >= max_cached:
                 break
-
+        print("before for i in range(n_columns):")
         # infer each column type
         for i in range(n_columns):
             # check for nulls

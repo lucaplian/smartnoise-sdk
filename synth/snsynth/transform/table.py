@@ -246,6 +246,7 @@ class TableTransformer:
 
         if len(continuous_columns) + len(ordinal_columns) + len(categorical_columns) == 0:
             inferred = TypeMap.infer_column_types(data, excluded_columns=excluded_columns)
+            print("inferred=", inferred)
             categorical_columns = inferred['categorical_columns']
             ordinal_columns = inferred['ordinal_columns']
             continuous_columns = inferred['continuous_columns']

@@ -18,7 +18,6 @@ class LabelTransformer(ColumnTransformer):
     def cardinality(self):
         return [len(self.categories)]
     def _fit(self, val):
-        print("labeltransformer def _fit")
         if isinstance(val, float) and np.isnan(val):
             val = None
         if val not in self.labels:

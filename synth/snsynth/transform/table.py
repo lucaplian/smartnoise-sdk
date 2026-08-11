@@ -143,6 +143,9 @@ class TableTransformer:
         self.fit(data, epsilon=epsilon)
         return self.transform(data)
     def inverse_transform(self, data):
+        print("self=", self)
+        print("tabletransformer")
+        print("self._inverse_transform=", self._inverse_transform)
         if self.transformers == []:
             return data
         transformed = [self._inverse_transform(row) for row in data]

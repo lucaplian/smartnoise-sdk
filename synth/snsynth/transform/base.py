@@ -121,6 +121,9 @@ class ColumnTransformer:
             assert(all([a == b for a, b in zip(iris[0], iris_decoded)]))
             
         """
+        print("self=", self)
+        print("columntransformer")
+        print("self._inverse_transform=", self._inverse_transform)
         if idx is None:
             return [self._inverse_transform(val) for val in data]
         else:

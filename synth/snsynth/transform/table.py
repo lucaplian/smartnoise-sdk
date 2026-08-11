@@ -17,6 +17,7 @@ class TableTransformer:
     """
     def __init__(self, transformers=[], *ignore, odometer=None):
         # one transformer per input column
+        print("transformers=", transformers)
         self.transformers = transformers
         if self.fit_complete:
             self.output_width = sum([t.output_width for t in self.transformers])
@@ -177,7 +178,7 @@ class TableTransformer:
                 v = row.pop(0)
             else:
                 v = tuple([row.pop(0) for _ in range(t.output_width)])
-            if j % 10 == 0 and i%10==0:
+            if j % 10 == 0 and (i-5)%10==0:
                 print("t=", t)
             out_row.append(t._inverse_transform(v))
         return tuple(out_row)

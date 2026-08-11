@@ -167,7 +167,7 @@ class TableTransformer:
             raise ValueError(f"Row has wrong length: got {len(row)}, expected {self.output_width}")
         out_row = []
         row = list(row)
-    	for i, t in enumerate(self.transformers):
+        for i, t in enumerate(self.transformers):
             if isinstance(t, DropTransformer): # don't include None values from DropTransformer
                 self._dropped_column_indices.add(i) # and mark column index as dropped
                 continue

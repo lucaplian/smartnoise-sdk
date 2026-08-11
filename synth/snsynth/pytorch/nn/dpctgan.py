@@ -481,6 +481,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
         """
         TODO: Add condition_column support from CTGAN
         """
+        print("self=", self)
         print("self._generator=", self._generator)
         self._generator.eval()
 
@@ -522,7 +523,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
 
 
     def fit(self, data, *ignore, transformer=None, categorical_columns=[], ordinal_columns=[], continuous_columns=[], preprocessor_eps=0.0, nullable=False):
-        print("self=", self)
+        print("self=", self) #TableTransformer
 
         self.train(data, transformer=transformer, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, preprocessor_eps=preprocessor_eps, nullable=nullable)
 

@@ -17,7 +17,7 @@ class TableTransformer:
     """
     def __init__(self, transformers=[], *ignore, odometer=None):
         # one transformer per input column
-        print("transformers=", transformers)
+        print("!!!transformers!!!=", transformers)
         self.transformers = transformers
         if self.fit_complete:
             self.output_width = sum([t.output_width for t in self.transformers])

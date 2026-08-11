@@ -242,6 +242,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
             preprocessor_eps=preprocessor_eps
         )
 
+        print("self._transformer.transformers=", self._transformer.transformers)
         train_data = np.array([
             [float(x) if x is not None else 0.0 for x in row] for row in train_data
         ])

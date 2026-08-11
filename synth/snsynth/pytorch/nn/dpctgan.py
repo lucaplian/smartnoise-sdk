@@ -511,11 +511,15 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
 
         print("data1=", data)
         data = np.concatenate(data, axis=0)
-        print("data2=", data)
+        print("data2=", data, "size_data2=", len(data), " size_data2=", len(data[0]))
         data = data[:n]
-        print("data3=", data)
-	print("self._transformer.inverse_transform(data)=",self._transformer.inverse_transform(data))
+        print("data3=", data, "size_data3=", len(data), " size_data3=", len(data[0]))
+       
+        print("self._transformer.inverse_transform(data)=",self._transformer.inverse_transform(data))
+        test_x = self._transformer.inverse_transform(data)
+        print("test_x shape=", test_x.shape)
         return self._transformer.inverse_transform(data)
+
 
     def fit(self, data, *ignore, transformer=None, categorical_columns=[], ordinal_columns=[], continuous_columns=[], preprocessor_eps=0.0, nullable=False):
         print("self=", self)

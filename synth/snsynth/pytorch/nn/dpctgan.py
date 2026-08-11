@@ -231,6 +231,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
         if update_epsilon:
             self.epsilon = update_epsilon
 
+        print("before self._get_train_data(")
         train_data = self._get_train_data(
             data,
             style='gan',

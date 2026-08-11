@@ -73,6 +73,7 @@ class TableTransformer:
             self._columns = list(data.columns)
             data = [tuple([c for c in t[1:]]) for t in data.itertuples()]
         self._dropped_column_indices = set()
+        print("before t in self.transformers")
         for t in self.transformers:
             t._clear_fit()
         for row in data:

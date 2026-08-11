@@ -6,6 +6,7 @@ class ColumnTransformer:
     """Base class for column transformers.  Subclasses must implement the
     _fit, _transform, and _inverse_transform methods."""
     def __init__(self):
+        print("columntransformer init")
         self._fit_complete = False
         self.output_width = 0
         self._clear_fit()

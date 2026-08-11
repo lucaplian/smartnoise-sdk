@@ -148,7 +148,9 @@ class TableTransformer:
         print("self._inverse_transform=", self._inverse_transform)
         if self.transformers == []:
             return data
-        transformed = [self._inverse_transform(row) for row in data]
+        transformed = [self._inverse_transform(row, i) for row in enumerate(data)]
+        print("self._columns=", self._columns)
+        print("self._dtype=", self._dtype)
         if self._columns is not None:
             columns = [col for i, col in enumerate(self._columns) if i not in self._dropped_column_indices]
             return pd.DataFrame(transformed, columns=columns)
@@ -156,11 +158,16 @@ class TableTransformer:
             return np.array(transformed, dtype=self._dtype)
         else:
             return transformed
-    def _inverse_transform(self, row):
+    def _inverse_transform(self, row, j):
+
+        
+
         if len(row) != self.output_width:
             raise ValueError(f"Row has wrong length: got {len(row)}, expected {self.output_width}")
         out_row = []
         row = list(row)
+        if j % 10 == 0:
+            print("self.transformers=", self.transformers, "length transformers=", len(self.transformers))
         for i, t in enumerate(self.transformers):
             if isinstance(t, DropTransformer): # don't include None values from DropTransformer
                 self._dropped_column_indices.add(i) # and mark column index as dropped
@@ -170,6 +177,8 @@ class TableTransformer:
                 v = row.pop(0)
             else:
                 v = tuple([row.pop(0) for _ in range(t.output_width)])
+            if j % 10 == 0 and i%10==0:
+                print("t=", t)
             out_row.append(t._inverse_transform(v))
         return tuple(out_row)
 

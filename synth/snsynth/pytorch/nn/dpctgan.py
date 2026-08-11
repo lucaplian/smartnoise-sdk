@@ -524,7 +524,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
 
     def fit(self, data, *ignore, transformer=None, categorical_columns=[], ordinal_columns=[], continuous_columns=[], preprocessor_eps=0.0, nullable=False):
         print("self=", self) #TableTransformer
-
+        print("transformer=", transformer)
         self.train(data, transformer=transformer, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, preprocessor_eps=preprocessor_eps, nullable=nullable)
 
     def sample(self, n_samples):

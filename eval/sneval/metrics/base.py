@@ -7,6 +7,9 @@ class Metric:
         position_args = ['column_name', 'column_names', 'categorical_columns', 'measure_columns', 'sum_columns', 'label_column', 'prediction_column']
         if not args:
             args = [kwargs.pop(arg) for arg in position_args if arg in kwargs]
+        print("args=", args)
+        print("kwargs=", kwargs)
+        print("cls=", cls)
         module = importlib.import_module('sneval.metrics')
         if not hasattr(module, name):
             raise ValueError("Module {} does not have attribute {}.".format(module, name))

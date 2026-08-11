@@ -9,7 +9,7 @@ class IdentityTransformer(ColumnTransformer):
     def cardinality(self):
         return [None]
     def _fit(self, val):
-        print("identitytransformer def _fit")
+        #print("identitytransformer def _fit")
         pass
     def _clear_fit(self):
         print("identitytransformer def _clear_fit")

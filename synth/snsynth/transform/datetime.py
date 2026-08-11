@@ -33,7 +33,7 @@ class DateTimeTransformer(ColumnTransformer):
     def cardinality(self):
         return [None]
     def _fit(self, val, idx=None):
-        print("datetimetransformer def _fit")
+        #print("datetimetransformer def _fit")
         pass
     def _clear_fit(self):
         print("datetimetransformer def _clear_fit")

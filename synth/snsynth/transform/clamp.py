@@ -16,7 +16,7 @@ class ClampTransformer(ColumnTransformer):
     def cardinality(self):
         return [1]
     def _fit(self, val):
-        print("clamptransformer def _fit")
+        #print("clamptransformer def _fit")
         pass
     def _clear_fit(self):
         print("clamptransformer def _clear_fit")

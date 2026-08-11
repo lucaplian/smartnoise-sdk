@@ -15,7 +15,7 @@ class LogTransformer(ColumnTransformer):
     def cardinality(self):
         return [None]
     def _fit(self, val, idx=None):
-        print("logtransformer def _fit")
+        #print("logtransformer def _fit")
         pass
     def _clear_fit(self):
         print("logtransformer def _clear_fit")

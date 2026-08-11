@@ -40,4 +40,7 @@ class DropTransformer(ColumnTransformer):
             return [row[:idx] + row[idx + 1 :] for row in data]
 
     def inverse_transform(self, data, idx=None):
+        print("self=", self)
+        print("droptransformer")
+        print("self._inverse_transform=", self._inverse_transform)
         return data

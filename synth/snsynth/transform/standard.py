@@ -112,6 +112,8 @@ class StandardScaler(CachingColumnTransformer):
         else:
             return val
     def _inverse_transform(self, val):
+        print("standardscaler def _inverse_transform")
+
         if not self.fit_complete:
             raise ValueError("StandardScaler has not been fit yet.")
         if self.nullable:

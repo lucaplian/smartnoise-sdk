@@ -16,7 +16,7 @@ class OneHotEncoder(ColumnTransformer):
     def cardinality(self):
         return [2] * (self.max + 1)
     def _fit(self, val):
-        print("onehotencoder def _fit")
+        #print("onehotencoder def _fit")
         if val > self.max:
             self.max = val
     def _fit_finish(self):

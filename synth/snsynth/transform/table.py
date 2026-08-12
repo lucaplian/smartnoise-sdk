@@ -259,7 +259,7 @@ class TableTransformer:
         
         all_specified = list(categorical_columns) + list(ordinal_columns) + list(continuous_columns)
         all_numeric = all([isinstance(c, int) for c in all_specified])
-        print("????")
+        print("????  ", isinstance(data, pd.DataFrame), "  ", isinstance(data, np.ndarray), "  ", isinstance(data, list))
         if isinstance(data, pd.DataFrame):
             print("cls.from_pandas=", cls.from_pandas(data, style=style, nullable=nullable, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints))
             return cls.from_pandas(data, style=style, nullable=nullable, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints)

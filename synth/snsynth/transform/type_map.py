@@ -172,6 +172,8 @@ class TypeMap:
         # infer each column type
         for i in range(n_columns):
             # check for nulls
+            print("cls.is_ids=", cls.is_ids, "cls=", cls)
+            print("value_cache[i]=",value_cache[i])
             if any([v is None or isinstance(v, float) and np.isnan(v) for v in value_cache[i]]):
                 nullable[i] = True
             # remove nulls
@@ -228,6 +230,7 @@ class TypeMap:
             'nullable_columns': [colnames[i] for i, v in enumerate(nullable) if v],
             'pii': pii
         }
+        print('result=', result)
         return result
 
     @classmethod

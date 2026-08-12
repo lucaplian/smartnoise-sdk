@@ -389,7 +389,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
                     optimizerD.step()
 
                     # train with real
-                    print ('y_real is {}'.format(y_real))
+                    
 
                     label_true = torch.full(
                         (int(self._batch_size / self.pac),),
@@ -398,6 +398,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
                         device=self._device,
                     )
                     y_real = discriminator(real_cat)
+                    print ('y_real is {}'.format(y_real))
                     error_d_real = criterion(y_real.squeeze(), label_true)
                     error_d_real.backward()
                     optimizerD.step()

@@ -401,7 +401,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
                     error_d_real = criterion(y_real.squeeze(), label_true)
                     error_d_real.backward()
                     optimizerD.step()
-                    print ('label_real is {}'.format(label_real))
+                    print ('real_label is {}'.format(real_label))
 
 
                     loss_d = error_d_real + error_d_fake

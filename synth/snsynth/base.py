@@ -164,6 +164,7 @@ class Synthesizer(SDGYMBaseSynthesizer):
                 ordinal_columns=ordinal_columns,
                 nullable=nullable,
                 constraints=transformer)
+            print("after it")
         elif isinstance(transformer, TableTransformer):
             self._transformer = transformer
         else:

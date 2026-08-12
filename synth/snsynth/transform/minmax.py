@@ -95,6 +95,10 @@ class MinMaxTransformer(CachingColumnTransformer):
             val = v
             if n == 1:
                 return None
+        
+        if abs(val) < 0.01:
+            return 0
+            
         if self.negative:
             val = (1 + val) / 2
         val = val * (self.fit_upper - self.fit_lower) + self.fit_lower

@@ -369,7 +369,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
                     fake_cat = fakeact
 
                 optimizerD.zero_grad()
-
+                print("self=", self)
                 print("self.loss=", self.loss)
                 if self.loss == "cross_entropy":
                     y_fake = discriminator(fake_cat)

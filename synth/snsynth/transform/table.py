@@ -111,6 +111,8 @@ class TableTransformer:
                     warnings.warn(f"Columns of data do not match columns of transformer: {columns} vs {self._columns}")
             self._columns = data.columns
             print("it goes through here isinstance(data, pd.DataFrame)")
+            numerical_columns = list(filter(lambda x: isinstance(data[x][0], (int, float, np.int64, np.float64, np.int32, np.float32)) and float(len(data[data[x].astype(float)==0.0]))>=0.5*float(len(data[x])), self._columns))
+            print("numerical_columns=", numerical_columns)
             data = [tuple([c for c in t[1:]]) for t in data.itertuples()]
             
         elif isinstance(data, np.ndarray):
@@ -122,7 +124,7 @@ class TableTransformer:
             print("it goes through here2222", self._columns)
             print("it goes through here isinstance(data, np.ndarray)")
             data = [tuple([c for c in t]) for t in data]
-        return [self._transform(row) for row in data]
+        return [self._transform(row, columns) for row in data]
     def _transform(self, row):
         out_row = []
         for v, t in zip(row, self.transformers):

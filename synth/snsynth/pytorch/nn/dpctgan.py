@@ -248,7 +248,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
             [float(x) if x is not None else 0.0 for x in row] for row in train_data
         ])
 
-        print("train_data2=", train_data)
+        #print("train_data2=", train_data)
 
         self._data_sampler = DataSampler(
             train_data,

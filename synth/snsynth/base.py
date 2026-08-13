@@ -182,9 +182,9 @@ class Synthesizer(SDGYMBaseSynthesizer):
                 print(f"Spent {eps_spent} epsilon on preprocessor, leaving {self.epsilon} for training")
                 if self.epsilon < 10E-3:
                     raise ValueError("Epsilon remaining is too small!")
-        print("data=", data)
+        #print("data=", data)
         train_data = self._transformer.transform(data)
-        print("train_data=", train_data)
+        #print("train_data=", train_data)
         return train_data
 
     # factory method

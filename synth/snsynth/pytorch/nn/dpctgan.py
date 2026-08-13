@@ -248,6 +248,8 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
             [float(x) if x is not None else 0.0 for x in row] for row in train_data
         ])
 
+        print("train_data2=", train_data)
+
         self._data_sampler = DataSampler(
             train_data,
             self._transformer.transformers
@@ -401,9 +403,11 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
                     y_real = discriminator(real_cat)
                     if i >=self._epochs-10:
                         print ('y_real is {}'.format(y_real))
+                    
                     error_d_real = criterion(y_real.squeeze(), label_true)
                     error_d_real.backward()
                     optimizerD.step()
+                    
                     if i >=self._epochs-10:
                         print ('real_label is {}'.format(real_label))
 

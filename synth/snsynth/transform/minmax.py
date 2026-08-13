@@ -76,17 +76,21 @@ class MinMaxTransformer(CachingColumnTransformer):
         if not self.fit_complete:
             raise ValueError("MinMaxTransformer has not been fit yet.")
         if self.nullable and (val is None or isinstance(val, float) and np.isnan(val)):
-            return (0.0, 1)
+            return (1.0, 0.0, 0.0)
         else:
+            
+            if val == 0:
+                return (1.0, 0.0, 0.0)
+
             val = self.fit_lower if val < self.fit_lower else val
             val = self.fit_upper if val > self.fit_upper else val
             val = (val - self.fit_lower) / (self.fit_upper - self.fit_lower)
             if self.negative:
                 val = (val * 2) - 1
         if self.nullable:
-            return (val, 0)
+            return (0.0, 1.0, val)
         else:
-            return val
+            return (0.0, 1.0, val)
     def _inverse_transform(self, val):
         if not self.fit_complete:
             raise ValueError("MinMaxTransformer has not been fit yet.")

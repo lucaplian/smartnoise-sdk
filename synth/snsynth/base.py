@@ -183,6 +183,8 @@ class Synthesizer(SDGYMBaseSynthesizer):
                 if self.epsilon < 10E-3:
                     raise ValueError("Epsilon remaining is too small!")
         train_data = self._transformer.transform(data)
+        print("train_data=", train_data)
+        print("train_data shape=", train_data.shape())
         return train_data
 
     # factory method

@@ -110,13 +110,17 @@ class TableTransformer:
                 if not(all([a == b for a, b in zip(columns, self._columns)])):
                     warnings.warn(f"Columns of data do not match columns of transformer: {columns} vs {self._columns}")
             self._columns = data.columns
+            print("it goes through here isinstance(data, pd.DataFrame)")
             data = [tuple([c for c in t[1:]]) for t in data.itertuples()]
+            
         elif isinstance(data, np.ndarray):
             self._dtype = data.dtype
             if len(data.shape) != 2:
                 raise ValueError(f"Data must be a 2D array, got shape {data.shape}")
             if data.shape[1] != len(self.transformers):
                 raise ValueError(f"Data must have {len(self.transformers)} columns, got {data.shape[1]}")
+            print("it goes through here2222", self._columns)
+            print("it goes through here isinstance(data, np.ndarray)")
             data = [tuple([c for c in t]) for t in data]
         return [self._transform(row) for row in data]
     def _transform(self, row):

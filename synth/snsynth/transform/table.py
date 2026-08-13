@@ -111,8 +111,8 @@ class TableTransformer:
                     warnings.warn(f"Columns of data do not match columns of transformer: {columns} vs {self._columns}")
             self._columns = data.columns
             print("it goes through here isinstance(data, pd.DataFrame)")
-            numerical_columns_indexes = list(filter(lambda x: isinstance(data[list(self._columns)[x]][0], (int, float, np.int64, np.float64, np.int32, np.float32)) and float(len(data[data[list(self._columns)[x]].astype(float)==0.0]))>=0.5*float(len(data[list(self._columns)[x]])), range(len(self._columns))))
-            print("numerical_columns=", numerical_columns_indexes)
+            zero_inflated_numerical_columns_indexes = list(filter(lambda x: isinstance(data[list(self._columns)[x]][0], (int, float, np.int64, np.float64, np.int32, np.float32)) and float(len(data[data[list(self._columns)[x]].astype(float)==0.0]))>=0.5*float(len(data[list(self._columns)[x]])), range(len(self._columns))))
+            print("numerical_columns=", zero_inflated_numerical_columns_indexes)
             data = [tuple([c for c in t[1:]]) for t in data.itertuples()]
             
         elif isinstance(data, np.ndarray):
@@ -124,7 +124,7 @@ class TableTransformer:
             print("it goes through here2222", self._columns)
             print("it goes through here isinstance(data, np.ndarray)")
             data = [tuple([c for c in t]) for t in data]
-        return [self._transform(row, numerical_columns_indexes) for row in data]
+        return [self._transform(row, zero_inflated_numerical_columns_indexes) for row in data], zero_inflated_numerical_columns_indexes
     def _transform(self, row, numerical_columns_indexes):
         out_row = []
         for i, (v, t) in enumerate(zip(row, self.transformers)):

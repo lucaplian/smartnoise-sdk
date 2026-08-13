@@ -232,7 +232,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
             self.epsilon = update_epsilon
 
         print("before self._get_train_data(")
-        train_data = self._get_train_data(
+        train_data, zero_inflated_numerical_columns_indexes = self._get_train_data(
             data,
             style='gan',
             transformer=transformer,
@@ -248,7 +248,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
             [float(x) if x is not None else 0.0 for x in row] for row in train_data
         ])
 
-        #print("train_data2=", train_data)
+        print("train_data2=", train_data[0])
 
         self._data_sampler = DataSampler(
             train_data,
@@ -342,6 +342,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
                 fakez = torch.normal(mean=mean, std=std)
 
                 condvec = self._data_sampler.sample_condvec(self._batch_size)
+                print("condvec=", condvec)
                 if condvec is None:
                     c1, m1, col, opt = None, None, None, None
                     real = self._data_sampler.sample_data(self._batch_size, col, opt)

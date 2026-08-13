@@ -22,6 +22,7 @@ class MinMaxTransformer(CachingColumnTransformer):
         self.budget_spent = []
         self.nullable = nullable
         self.odometer = odometer
+        self.is_zero_inflated = False
         super().__init__()
     @property
     def output_type(self):
@@ -54,7 +55,9 @@ class MinMaxTransformer(CachingColumnTransformer):
             self.fit_lower = self.lower
             self.fit_upper = self.upper
         self._fit_complete = True
-        if self.nullable:
+        if self.output_width == 3 or self.is_zero_inflated:
+            self.output_width = 3
+        elif self.nullable:
             self.output_width = 2
         else:
             self.output_width = 1
@@ -66,7 +69,9 @@ class MinMaxTransformer(CachingColumnTransformer):
         # if bounds provided, we can immediately use without fitting
         if self.lower and self.upper:
             self._fit_complete = True
-            if self.nullable:
+            if self.output_width == 3 or self.is_zero_inflated:
+                self.output_width = 3
+            elif self.nullable:
                 self.output_width = 2
             else:
                 self.output_width = 1
@@ -78,13 +83,16 @@ class MinMaxTransformer(CachingColumnTransformer):
         if not self.fit_complete:
             raise ValueError("MinMaxTransformer has not been fit yet.")
         if self.nullable and (val is None or isinstance(val, float) and np.isnan(val)):
-            
             if is_zero_inflated:
+                self.is_zero_inflated = True
+                self.output_width = 3
                 return [1.0, 0.0, 0.0]
             return (0.0, 1)
         else:
             
             if is_zero_inflated:
+                self.is_zero_inflated = True
+                self.output_width = 3
                 return [1.0, 0.0, 0.0]
 
             val = self.fit_lower if val < self.fit_lower else val

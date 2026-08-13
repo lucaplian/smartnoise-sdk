@@ -183,9 +183,9 @@ class Synthesizer(SDGYMBaseSynthesizer):
                 if self.epsilon < 10E-3:
                     raise ValueError("Epsilon remaining is too small!")
         #print("data=", data)
-        train_data = self._transformer.transform(data)
+        train_data, zero_inflated_numerical_columns_indexes = self._transformer.transform(data)
         #print("train_data=", train_data)
-        return train_data
+        return train_data, zero_inflated_numerical_columns_indexes
 
     # factory method
     @classmethod

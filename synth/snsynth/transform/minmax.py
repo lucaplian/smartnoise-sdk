@@ -72,15 +72,20 @@ class MinMaxTransformer(CachingColumnTransformer):
                 self.output_width = 1
             self.fit_lower = self.lower
             self.fit_upper = self.upper
-    def _transform(self, val):
+
+            
+    def _transform(self, val, is_zero_inflated=False):
         if not self.fit_complete:
             raise ValueError("MinMaxTransformer has not been fit yet.")
         if self.nullable and (val is None or isinstance(val, float) and np.isnan(val)):
-            return (1.0, 0.0, 0.0)
+            
+            if is_zero_inflated:
+                return [1.0, 0.0, 0.0]
+            return (0.0, 1)
         else:
             
-            if val == 0:
-                return (1.0, 0.0, 0.0)
+            if is_zero_inflated:
+                return [1.0, 0.0, 0.0]
 
             val = self.fit_lower if val < self.fit_lower else val
             val = self.fit_upper if val > self.fit_upper else val
@@ -88,9 +93,9 @@ class MinMaxTransformer(CachingColumnTransformer):
             if self.negative:
                 val = (val * 2) - 1
         if self.nullable:
-            return (0.0, 1.0, val)
+            return (val, 0.0)
         else:
-            return (0.0, 1.0, val)
+            return val
     def _inverse_transform(self, val):
         if not self.fit_complete:
             raise ValueError("MinMaxTransformer has not been fit yet.")

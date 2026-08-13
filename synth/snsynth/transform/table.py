@@ -111,8 +111,8 @@ class TableTransformer:
                     warnings.warn(f"Columns of data do not match columns of transformer: {columns} vs {self._columns}")
             self._columns = data.columns
             print("it goes through here isinstance(data, pd.DataFrame)")
-            numerical_columns = list(filter(lambda x: isinstance(data[x][0], (int, float, np.int64, np.float64, np.int32, np.float32)) and float(len(data[data[x].astype(float)==0.0]))>=0.5*float(len(data[x])), self._columns))
-            print("numerical_columns=", numerical_columns)
+            numerical_columns_indexes = list(filter(lambda x: isinstance(data[list(self._columns)[x]][0], (int, float, np.int64, np.float64, np.int32, np.float32)) and float(len(data[data[list(self._columns)[x]].astype(float)==0.0]))>=0.5*float(len(data[list(self._columns)[x]])), range(len(self._columns))))
+            print("numerical_columns=", numerical_columns_indexes)
             data = [tuple([c for c in t[1:]]) for t in data.itertuples()]
             
         elif isinstance(data, np.ndarray):
@@ -124,18 +124,24 @@ class TableTransformer:
             print("it goes through here2222", self._columns)
             print("it goes through here isinstance(data, np.ndarray)")
             data = [tuple([c for c in t]) for t in data]
-        return [self._transform(row, columns) for row in data]
-    def _transform(self, row):
+        return [self._transform(row, numerical_columns_indexes) for row in data]
+    def _transform(self, row, numerical_columns_indexes):
         out_row = []
-        for v, t in zip(row, self.transformers):
+        for i, (v, t) in enumerate(zip(row, self.transformers)):
+            output_transform = None
+            if i in numerical_columns_indexes and "MinMaxTransformer" in str(t):
+                output_transform = t._transform(v, True)
+            else:
+                output_transform = t._transform(v)
+
             if isinstance(t, AnonymizationTransformer) and not t.fake_inbound:
                 pass  # don't include any values if we wish to anonymize with inverse transformation
             elif isinstance(t, DropTransformer):
                 pass  # don't include any values from DropTransformer
             elif t.output_width == 1:
-                out_row.append(t._transform(v))
+                out_row.append(output_transform)
             else:
-                for out_v in t._transform(v):
+                for out_v in output_transform:
                     out_row.append(out_v)
         return tuple(out_row)
     def fit_transform(self, data, *ignore, epsilon=None):

@@ -256,6 +256,8 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
         )
 
         data_dim = self._transformer.output_width
+        print("data_dim=", data_dim)
+        print("train_data=", len(train_data), len(train_data[0]),  len(train_data) * len(train_data[0]))
 
         self._generator = Generator(
             self._embedding_dim + self._data_sampler.dim_cond_vec(),

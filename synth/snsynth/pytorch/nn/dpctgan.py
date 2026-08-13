@@ -255,7 +255,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
             self._transformer.transformers
         )
 
-        data_dim = self._transformer.output_width
+        data_dim = sum([t.output_width for t in self._transformer.transformers])
         print("data_dim=", data_dim)
         print("train_data=", len(train_data), len(train_data[0]),  len(train_data) * len(train_data[0]))
 

@@ -533,8 +533,8 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
         data = np.concatenate(data, axis=0)
         print("data2=", data, "size_data2=", len(data), " size_data2=", len(data[0]))
         data = data[:n]
-        print("data3=", data, "size_data3=", len(data), " size_data3=", len(data[0]))
-       
+        print("data3=", data[0], "size_data3=", len(data), " size_data3=", len(data[0]))
+        self._transformer.output_width = sum([t.output_width for t in self._transformer.transformers])
         print("self._transformer.inverse_transform(data)=",self._transformer.inverse_transform(data))
         test_x = self._transformer.inverse_transform(data)
         print("test_x shape=", test_x.shape)

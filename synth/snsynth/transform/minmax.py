@@ -90,7 +90,7 @@ class MinMaxTransformer(CachingColumnTransformer):
             return (0.0, 1)
         else:
             
-            if is_zero_inflated:
+            if is_zero_inflated and float(val)==0.0:
                 self.is_zero_inflated = True
                 self.output_width = 3
                 return [1.0, 0.0, 0.0]
@@ -101,8 +101,11 @@ class MinMaxTransformer(CachingColumnTransformer):
             if self.negative:
                 val = (val * 2) - 1
         if self.nullable:
+            print("it enters self.nullable")
             return (val, 0.0)
         else:
+            if is_zero_inflated:
+                return [0.0, 1.0, val]
             return val
     def _inverse_transform(self, val):
         if not self.fit_complete:

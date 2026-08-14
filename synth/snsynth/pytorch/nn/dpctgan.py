@@ -344,7 +344,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
                 fakez = torch.normal(mean=mean, std=std)
 
                 condvec = self._data_sampler.sample_condvec(self._batch_size)
-                print("condvec=", condvec)
+                #print("condvec=", condvec)
                 if condvec is None:
                     c1, m1, col, opt = None, None, None, None
                     real = self._data_sampler.sample_data(self._batch_size, col, opt)

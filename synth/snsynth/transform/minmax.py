@@ -113,6 +113,8 @@ class MinMaxTransformer(CachingColumnTransformer):
             if n == 1:
                 return None
         
+            
+        
         
         
         if self.negative:

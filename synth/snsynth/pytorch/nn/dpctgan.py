@@ -356,6 +356,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
 
                     perm = np.arange(self._batch_size)
                     np.random.shuffle(perm)
+                    
                     real = self._data_sampler.sample_data(
                         self._batch_size, col[perm], opt[perm]
                     )

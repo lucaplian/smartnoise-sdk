@@ -25,7 +25,7 @@ class DataSampler(object):
         self._discrete_column_category_prob = None
 
         n_discrete_columns = sum(
-            [1 for t in self._transformers if t.is_categorical])
+            [1 for t in self._transformers if t.is_categorical or t.output_width==3])
 
         self._discrete_column_matrix_st = np.zeros(
             n_discrete_columns, dtype="int32")
@@ -38,22 +38,26 @@ class DataSampler(object):
         # Compute _rid_by_cat_cols
         st = 0
         for t in self._transformers:
-            if t.is_categorical:
+            if t.is_categorical or t.output_width==3:
                 ed = st + t.output_width
 
                 rid_by_cat = []
-                for j in range(t.output_width):
+                
+                output_width_final = t.output_width-1 if t.output_width == 3 else t.output_width
+
+                for j in range(output_width_final):
                     rid_by_cat.append(np.nonzero(data[:, st + j])[0])
                 self._rid_by_cat_cols.append(rid_by_cat)
                 st = ed
+
             else:
                 st += t.output_width
         assert st == data.shape[1]
 
         # Prepare an interval matrix for efficiently sample conditional vector
         max_category = max(
-            [t.output_width for t in self._transformers
-             if t.is_categorical], default=0)
+            [t.output_width-1 if t.output_width==3 else t.output_width for t in self._transformers
+             if t.is_categorical or t.output_width==3 ], default=0)
 
         self._discrete_column_cond_st = np.zeros(n_discrete_columns, dtype='int32')
         self._discrete_column_n_category = np.zeros(
@@ -62,25 +66,27 @@ class DataSampler(object):
             (n_discrete_columns, max_category))
         self._n_discrete_columns = n_discrete_columns
         self._n_categories = sum(
-            [t.output_width for t in self._transformers
-             if t.is_categorical])
+            [t.output_width-1 if t.output_width==3 else t.output_width for t in self._transformers
+             if t.is_categorical or t.output_width==3 ])
 
         eps_tot = 0.0
         st = 0
         current_id = 0
         current_cond_st = 0
         for t in self._transformers:
-            if t.is_categorical:
+            if t.is_categorical or t.output_width==3:
+                output_width_final = t.output_width-1 if t.output_width == 3 else t.output_width
                 ed = st + t.output_width
-                category_freq = np.sum(data[:, st:ed], axis=0)
+                ed_t = st + output_width_final
+                category_freq = np.sum(data[:, st:ed_t], axis=0)
                 category_freq = [1 if v < 1 else v for v in category_freq]
                 category_freq = np.array(category_freq, dtype='float64')
                 category_prob = category_freq / np.sum(category_freq)
-                self._discrete_column_category_prob[current_id, :t.output_width] = (
+                self._discrete_column_category_prob[current_id, :output_width_final] = (
                     category_prob)
                 self._discrete_column_cond_st[current_id] = current_cond_st
-                self._discrete_column_n_category[current_id] = t.output_width
-                current_cond_st += t.output_width
+                self._discrete_column_n_category[current_id] = output_width_final
+                current_cond_st += output_width_final
                 current_id += 1
                 st = ed
             else:

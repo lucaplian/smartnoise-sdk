@@ -199,9 +199,16 @@ class CTGANSynthesizer(BaseSynthesizer):
         st = 0
         for transformer in self._transformer.transformers:
             if transformer.is_continuous:
-                ed = st + transformer.output_width
-                data_t.append(torch.tanh(data[:, st:ed]))
-                st = ed
+                if self.transformer.output_width==3:
+                    #
+                    ed = st + transformer.output_width
+                    data_t.append(torch.softmax(data[:, st:st+2]))
+                    data_t.append(torch.tanh(data[:, st+2:ed]))
+                    st = ed
+                else:
+                    ed = st + transformer.output_width
+                    data_t.append(torch.tanh(data[:, st:ed]))
+                    st = ed
             elif transformer.is_categorical:
                 ed = st + transformer.output_width
                 transformed = self._gumbel_softmax(data[:, st:ed], tau=0.2)
@@ -219,6 +226,19 @@ class CTGANSynthesizer(BaseSynthesizer):
             if not t.is_categorical:
                 # not discrete column
                 st += t.output_width
+            elif self._transformer.output_width==3:
+                ed = st + 2
+                ed_c = st_c + 2
+                tmp = functional.cross_entropy(
+                    data[:, st:ed],
+                    torch.argmax(c[:, st_c:ed_c], dim=1),
+                    reduction='none'
+                )
+                loss.append(tmp)
+                st += t.output_width
+                st_c += t.output_width
+                st = ed
+                st_c = ed_c      
             else:
                 ed = st + t.output_width
                 ed_c = st_c + t.output_width

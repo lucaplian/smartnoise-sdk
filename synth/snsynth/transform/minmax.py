@@ -121,6 +121,7 @@ class MinMaxTransformer(CachingColumnTransformer):
         
         
         if self.negative:
+            print("VAL=", val)
             val = (1 + val) / 2
         val = val * (self.fit_upper - self.fit_lower) + self.fit_lower
         return np.clip(val, self.fit_lower, self.fit_upper)

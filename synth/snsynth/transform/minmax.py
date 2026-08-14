@@ -105,6 +105,8 @@ class MinMaxTransformer(CachingColumnTransformer):
             return (val, 0.0)
         else:
             if is_zero_inflated:
+                self.is_zero_inflated = True
+                self.output_width = 3
                 return [0.0, 1.0, val]
             return val
     def _inverse_transform(self, val):

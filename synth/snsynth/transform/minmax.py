@@ -123,9 +123,9 @@ class MinMaxTransformer(CachingColumnTransformer):
         
         
         if self.negative:
-            if len(val) == 3:
+            if ("float" not in str(type(val)) and "int" not in str(type(val))) and len(val) == 3:
                 if val[0] > 0.5:
-                    val = 0.0
+                    return 0.0
                 else:
                     val = val[2]
             val = (1 + val) / 2

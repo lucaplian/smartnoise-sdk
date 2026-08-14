@@ -199,7 +199,7 @@ class CTGANSynthesizer(BaseSynthesizer):
         st = 0
         for transformer in self._transformer.transformers:
             if transformer.is_continuous:
-                if self.transformer.output_width==3:
+                if transformer.output_width==3:
                     #
                     ed = st + transformer.output_width
                     data_t.append(torch.softmax(data[:, st:st+2]))

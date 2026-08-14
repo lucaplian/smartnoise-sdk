@@ -17,7 +17,6 @@ class TableTransformer:
     """
     def __init__(self, transformers=[], *ignore, odometer=None):
         # one transformer per input column
-        print("!!!transformers!!!=", transformers)
         self.transformers = transformers
         if self.fit_complete:
             self.output_width = sum([t.output_width for t in self.transformers])
@@ -64,7 +63,6 @@ class TableTransformer:
         :param data: a table represented as a list of tuples, a numpy.ndarray, or a pandas DataFrame
         :param epsilon: the privacy budget to spend fitting the data
         """
-        print("it goes to TableTransformer")
         if self.transformers == []:
             self._fit_finish()
         if epsilon is not None and epsilon > 0.0:
@@ -73,7 +71,6 @@ class TableTransformer:
             self._columns = list(data.columns)
             data = [tuple([c for c in t[1:]]) for t in data.itertuples()]
         self._dropped_column_indices = set()
-        print("before t in self.transformers")
         for t in self.transformers:
             t._clear_fit()
         for row in data:
@@ -85,10 +82,8 @@ class TableTransformer:
             warnings.warn("No columns were selected for output.  This may be because all columns were anonymized.")
     def _fit(self, row):
         for v, t in zip(row, self.transformers):
-            #print("t=", t)
             t._fit(v)
     def _fit_finish(self):
-        print("tabletransformer def _fit_finish")
         self.output_width = sum([t.output_width for t in self.transformers])
     def transform(self, data):
         """Transforms the data.
@@ -110,9 +105,7 @@ class TableTransformer:
                 if not(all([a == b for a, b in zip(columns, self._columns)])):
                     warnings.warn(f"Columns of data do not match columns of transformer: {columns} vs {self._columns}")
             self._columns = data.columns
-            print("it goes through here isinstance(data, pd.DataFrame)")
             zero_inflated_numerical_columns_indexes = list(filter(lambda x: isinstance(data[list(self._columns)[x]][0], (int, float, np.int64, np.float64, np.int32, np.float32)) and float(len(data[data[list(self._columns)[x]].astype(float)==0.0]))>=0.5*float(len(data[list(self._columns)[x]])), range(len(self._columns))))
-            print("numerical_columns=", zero_inflated_numerical_columns_indexes)
             data = [tuple([c for c in t[1:]]) for t in data.itertuples()]
             
         elif isinstance(data, np.ndarray):
@@ -121,8 +114,6 @@ class TableTransformer:
                 raise ValueError(f"Data must be a 2D array, got shape {data.shape}")
             if data.shape[1] != len(self.transformers):
                 raise ValueError(f"Data must have {len(self.transformers)} columns, got {data.shape[1]}")
-            print("it goes through here2222", self._columns)
-            print("it goes through here isinstance(data, np.ndarray)")
             data = [tuple([c for c in t]) for t in data]
         return [self._transform(row, zero_inflated_numerical_columns_indexes) for row in data], zero_inflated_numerical_columns_indexes
     def _transform(self, row, numerical_columns_indexes):
@@ -157,14 +148,10 @@ class TableTransformer:
         self.fit(data, epsilon=epsilon)
         return self.transform(data)
     def inverse_transform(self, data):
-        print("self=", self)
-        print("tabletransformer")
-        print("self._inverse_transform=", self._inverse_transform)
         if self.transformers == []:
             return data
         transformed = [self._inverse_transform(row, i) for i, row in enumerate(data)]
-        print("self._columns=", self._columns)
-        print("self._dtype=", self._dtype)
+        
         if self._columns is not None:
             columns = [col for i, col in enumerate(self._columns) if i not in self._dropped_column_indices]
             return pd.DataFrame(transformed, columns=columns)
@@ -259,30 +246,21 @@ class TableTransformer:
             excluded_columns = set(constraints.keys())
 
         if len(continuous_columns) + len(ordinal_columns) + len(categorical_columns) == 0:
-            print("before inferred")
             inferred = TypeMap.infer_column_types(data, excluded_columns=excluded_columns)
-            print("inferred=", inferred)
             categorical_columns = inferred['categorical_columns']
             ordinal_columns = inferred['ordinal_columns']
             continuous_columns = inferred['continuous_columns']
             special_types = dict(zip(inferred['columns'], inferred['pii']))
             if not nullable:
                 nullable = len(inferred['nullable_columns']) > 0
-            print("after if not nullable")
         
         all_specified = list(categorical_columns) + list(ordinal_columns) + list(continuous_columns)
         all_numeric = all([isinstance(c, int) for c in all_specified])
-        print("????  ", isinstance(data, pd.DataFrame), "  ", isinstance(data, np.ndarray), "  ", isinstance(data, list))
-        print("cls.from_pandas=", cls.from_pandas(data, style=style, nullable=nullable, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints))
         if isinstance(data, pd.DataFrame):
-            print("enters here")
-            print("cls.from_pandas=", cls.from_pandas(data, style=style, nullable=nullable, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints))
             return cls.from_pandas(data, style=style, nullable=nullable, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints)
         elif isinstance(data, np.ndarray):
-            print("cls.from_numpy=", cls.from_numpy(data, style=style, nullable=nullable, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints))
             return cls.from_numpy(data, style=style, nullable=nullable, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints)
         elif isinstance(data, list):
-            print("cls.from_list=", cls.from_list(data, style=style, nullable=nullable, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints))
             return cls.from_list(data, style=style, nullable=nullable, header=(not all_numeric), categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, special_types=special_types, constraints=constraints)
         else:
             raise ValueError(f"Unknown data type: {type(data)}")

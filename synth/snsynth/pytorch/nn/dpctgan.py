@@ -231,7 +231,6 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
         if update_epsilon:
             self.epsilon = update_epsilon
 
-        print("before self._get_train_data(")
         train_data, zero_inflated_numerical_columns_indexes = self._get_train_data(
             data,
             style='gan',
@@ -243,12 +242,10 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
             preprocessor_eps=preprocessor_eps
         )
 
-        print("self._transformer.transformers=", self._transformer.transformers)
         train_data = np.array([
             [float(x) if x is not None else 0.0 for x in row] for row in train_data
         ])
 
-        print("train_data2=", train_data[0])
 
         self._data_sampler = DataSampler(
             train_data,
@@ -256,8 +253,6 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
         )
 
         data_dim = sum([t.output_width for t in self._transformer.transformers])
-        print("data_dim=", data_dim)
-        print("train_data=", len(train_data), len(train_data[0]),  len(train_data) * len(train_data[0]))
 
         self._generator = Generator(
             self._embedding_dim + self._data_sampler.dim_cond_vec(),
@@ -307,7 +302,6 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
         assert self._batch_size % 2 == 0
         mean = torch.zeros(self._batch_size, self._embedding_dim, device=self._device)
         std = mean + 1
-        print("begins epochs here")
         steps_per_epoch = max(len(train_data) // self._batch_size, 1)
         for i in range(self._epochs):
             for p in discriminator.parameters():
@@ -344,7 +338,6 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
                 fakez = torch.normal(mean=mean, std=std)
 
                 condvec = self._data_sampler.sample_condvec(self._batch_size)
-                #print("condvec=", condvec)
                 if condvec is None:
                     c1, m1, col, opt = None, None, None, None
                     real = self._data_sampler.sample_data(self._batch_size, col, opt)
@@ -375,9 +368,7 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
                     fake_cat = fakeact
 
                 optimizerD.zero_grad()
-                if i >=self._epochs-10:
-                    print("self=", self)
-                    print("self.loss=", self.loss)
+                
                 if self.loss == "cross_entropy":
                     y_fake = discriminator(fake_cat)
                     if i >=self._epochs-10:
@@ -500,8 +491,6 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
         """
         TODO: Add condition_column support from CTGAN
         """
-        print("self=", self)
-        print("self._generator=", self._generator)
         self._generator.eval()
 
         # output_info = self._transformer.output_info
@@ -521,29 +510,17 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
                 c1 = torch.from_numpy(c1).to(self._device)
                 fakez = torch.cat([fakez, c1], dim=1)
 
-            print("self._generator=", self._generator, "fakez=", fakez)
             fake = self._generator(fakez)
-            print("fake=", fake)
             fakeact = self._apply_activate(fake)
-            print("fakeact=", fakeact)
             data.append(fakeact.detach().cpu().numpy())
-            print("fakeact dettached=", fakeact.detach().cpu().numpy())
 
-        print("data1=", data)
         data = np.concatenate(data, axis=0)
-        print("data2=", data, "size_data2=", len(data), " size_data2=", len(data[0]))
         data = data[:n]
-        print("data3=", data[0], "size_data3=", len(data), " size_data3=", len(data[0]))
         self._transformer.output_width = sum([t.output_width for t in self._transformer.transformers])
-        print("self._transformer.inverse_transform(data)=",self._transformer.inverse_transform(data))
-        test_x = self._transformer.inverse_transform(data)
-        print("test_x shape=", test_x.shape)
         return self._transformer.inverse_transform(data)
 
 
     def fit(self, data, *ignore, transformer=None, categorical_columns=[], ordinal_columns=[], continuous_columns=[], preprocessor_eps=0.0, nullable=False):
-        print("self=", self) #TableTransformer
-        print("transformer=", transformer)
         self.train(data, transformer=transformer, categorical_columns=categorical_columns, ordinal_columns=ordinal_columns, continuous_columns=continuous_columns, preprocessor_eps=preprocessor_eps, nullable=nullable)
 
     def sample(self, n_samples):

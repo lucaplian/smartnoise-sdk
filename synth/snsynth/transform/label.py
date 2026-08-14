@@ -26,7 +26,6 @@ class LabelTransformer(ColumnTransformer):
             self.category += 1
             self.output_width = 1
     def _fit_finish(self):
-        print("labeltransformer def _fit_finish")
         self._fit_complete = True
 
         # try sorting the categories so this can be used in ordinals
@@ -47,7 +46,6 @@ class LabelTransformer(ColumnTransformer):
         return
 
     def _clear_fit(self):
-        print("labeltransformer def _clear_fit")
         self._reset_fit()
         self.labels = {}
         self.categories = {}

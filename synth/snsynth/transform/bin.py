@@ -39,7 +39,6 @@ class BinTransformer(CachingColumnTransformer):
         self.epsilon = epsilon
         self.odometer = odometer
     def _fit_finish(self):
-        print("class bintransformer def _fit_finish")
         if self.epsilon is not None and self.epsilon > 0.0 and (self.lower is None or self.upper is None):
             self._fit_vals = [v for v in self._fit_vals if v is not None and not (isinstance(v, float) and np.isnan(v))]
             self.fit_lower, self.fit_upper = approx_bounds(self._fit_vals, self.epsilon)
@@ -59,7 +58,6 @@ class BinTransformer(CachingColumnTransformer):
         else:
             self.output_width = 1
     def _clear_fit(self):
-        print("BinTransformer def _clear_fit")
         self._reset_fit()
         self.fit_lower = None
         self.fit_upper = None

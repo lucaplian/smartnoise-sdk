@@ -88,11 +88,9 @@ class AnonymizationTransformer(ColumnTransformer):
         return [None]
 
     def _fit(self, _):
-        print("annon def _fit")
         pass
 
     def _clear_fit(self):
-        print("annon def _clear_fit")
         self._fit_complete = True
         self.output_width = 1 if self.fake_inbound else 0
 
@@ -106,8 +104,6 @@ class AnonymizationTransformer(ColumnTransformer):
             return None
 
     def _inverse_transform(self, val):
-        print("anonymizationtransformer def _clear_fit")
-
         if self.fake_inbound:
             return val
         else:
@@ -120,9 +116,6 @@ class AnonymizationTransformer(ColumnTransformer):
             return [row[:idx] + row[idx + 1 :] for row in data]
 
     def inverse_transform(self, data, idx=None):
-        print("self=", self)
-        print("anonymizationtransformer")
-        print("self._inverse_transform=", self._inverse_transform)
         if idx is None:
             return [self._inverse_transform(val) for val in data]
         else:

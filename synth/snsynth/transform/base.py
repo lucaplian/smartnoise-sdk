@@ -6,7 +6,6 @@ class ColumnTransformer:
     """Base class for column transformers.  Subclasses must implement the
     _fit, _transform, and _inverse_transform methods."""
     def __init__(self):
-        print("columntransformer init")
         self._fit_complete = False
         self.output_width = 0
         self._clear_fit()
@@ -67,7 +66,6 @@ class ColumnTransformer:
 
         Calling this method repeatedly should perform a fresh fit each time using the new data.  
         """
-        print("it reaches ColumnTransformer")
         self._clear_fit()
         if idx is None:
             for val in data:
@@ -122,21 +120,16 @@ class ColumnTransformer:
             assert(all([a == b for a, b in zip(iris[0], iris_decoded)]))
             
         """
-        print("self=", self)
-        print("columntransformer")
-        print("self._inverse_transform=", self._inverse_transform)
         if idx is None:
             return [self._inverse_transform(val) for val in data]
         else:
             return [self._inverse_transform(row[idx]) for row in data]
     def _fit(self, val):
-        print("columntransformer2 def _fit")
 
         """Must be implemented by subclasses to fit a single value.
         """
         raise NotImplementedError
     def _fit_finish(self):
-        print("columntransformer def _fit_finish")
         """Should be implemented by subclasses if there is
         any work that needs to be done to finish the fit process."""
         self._fit_complete = True

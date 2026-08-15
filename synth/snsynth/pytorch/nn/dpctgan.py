@@ -371,17 +371,13 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
                 
                 if self.loss == "cross_entropy":
                     y_fake = discriminator(fake_cat)
-                    if i >=self._epochs-10:
-                        print ('y_fake is {}'.format(y_fake))
                     label_fake = torch.full(
                         (int(self._batch_size / self.pac),),
                         fake_label,
                         dtype=torch.float,
                         device=self._device,
                     )
-                    if i >=self._epochs-10:
-                        print ('label_fake is {}'.format(label_fake))
-
+                    
                     error_d_fake = criterion(y_fake.squeeze(), label_fake)
                     error_d_fake.backward()
                     optimizerD.step()
@@ -396,16 +392,12 @@ class DPCTGAN(CTGANSynthesizer, Synthesizer):
                         device=self._device,
                     )
                     y_real = discriminator(real_cat)
-                    if i >=self._epochs-10:
-                        print ('y_real is {}'.format(y_real))
                     
                     error_d_real = criterion(y_real.squeeze(), label_true)
                     error_d_real.backward()
                     optimizerD.step()
                     
-                    if i >=self._epochs-10:
-                        print ('real_label is {}'.format(real_label))
-
+                    
 
                     loss_d = error_d_real + error_d_fake
 
